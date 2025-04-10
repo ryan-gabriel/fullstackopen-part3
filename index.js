@@ -120,10 +120,8 @@ const unknownEndpoint = (request, response) => {
 
 app.use(unknownEndpoint)
 
-const errorHandler = (error, request, response) => {
-  console.error('ERROR NAME:', error.name)
-  console.error('ERROR MESSAGE:', error.message)
-  console.error('FULL ERROR:', JSON.stringify(error, null, 2))
+// eslint-disable-next-line no-unused-vars
+const errorHandler = (error, request, response, next) => {
 
   if (error.name === 'CastError') {
     return response.status(400).send({ error: 'malformatted id' })
@@ -137,7 +135,7 @@ const errorHandler = (error, request, response) => {
     return response.status(404).json({ error: 'not found' })
   }
 
-  return response.status(500).json({ error: 'internal server error: ' + error.message })
+  return response.status(500).json({ error: 'Internal Server Error' + error.message })
 }
 
 
