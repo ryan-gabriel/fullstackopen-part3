@@ -120,9 +120,11 @@ const unknownEndpoint = (request, response) => {
 
 app.use(unknownEndpoint)
 
-// eslint-disable-next-line no-unused-vars
-const errorHandler = (error, request, response, next) => {
 
+const errorHandler = (error, request, response, next) => {
+  console.error(error)
+  console.error(error.message)
+  console.error(error.name)
   if (error.name === 'CastError') {
     return response.status(400).send({ error: 'malformatted id' })
   } else if (error.name === 'ValidationError' || error.message.includes('validation')) {
@@ -135,7 +137,7 @@ const errorHandler = (error, request, response, next) => {
     return response.status(404).json({ error: 'not found' })
   }
 
-  return response.status(500).json({ error: 'Internal Server Error' + error.message })
+  next(error)
 }
 
 
