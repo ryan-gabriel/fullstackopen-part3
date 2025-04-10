@@ -121,7 +121,7 @@ const unknownEndpoint = (request, response) => {
 app.use(unknownEndpoint)
 
 const errorHandler = (error, request, response) => {
-  console.error(error.message)
+  console.error(error)
 
   if(error.name === 'CastError') {
     return response.status(400).send({ error: 'malformatted id' })
@@ -138,7 +138,7 @@ const errorHandler = (error, request, response) => {
   else if(error.name === 'NotFoundError') {
     return response.status(404).json({ error: 'not found' })
   }
-  return response.status(500).json({ error: 'internal server error: ' + error.message })
+  return response.status(500).json({ error: 'internal server error: ' + error })
 }
 
 
