@@ -121,25 +121,25 @@ const unknownEndpoint = (request, response) => {
 app.use(unknownEndpoint)
 
 const errorHandler = (error, request, response) => {
-  console.error(error)
+  console.error('ERROR NAME:', error.name)
+  console.error('ERROR MESSAGE:', error.message)
+  console.error('FULL ERROR:', JSON.stringify(error, null, 2))
 
-  if(error.name === 'CastError') {
+  if (error.name === 'CastError') {
     return response.status(400).send({ error: 'malformatted id' })
-  }
-  else if(error.name === 'ValidationError') {
+  } else if (error.name === 'ValidationError' || error.message.includes('validation')) {
     return response.status(400).json({ error: error.message })
-  }
-  else if(error.name === 'JsonWebTokenError') {
+  } else if (error.name === 'JsonWebTokenError') {
     return response.status(401).json({ error: 'invalid token' })
-  }
-  else if(error.name === 'TokenExpiredError') {
+  } else if (error.name === 'TokenExpiredError') {
     return response.status(401).json({ error: 'token expired' })
-  }
-  else if(error.name === 'NotFoundError') {
+  } else if (error.name === 'NotFoundError') {
     return response.status(404).json({ error: 'not found' })
   }
-  return response.status(500).json({ error: 'internal server error: ' + error })
+
+  return response.status(500).json({ error: 'internal server error: ' + error.message })
 }
+
 
 
 app.use(errorHandler)
